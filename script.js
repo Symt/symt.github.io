@@ -11,6 +11,7 @@ var timeR = 0;
 var textbox = "";
 var clicks = 0;
 var timeL = 0;
+var currentTop = 0;
 $(document).ready(function() {
   currentDate = Date.now();
   start_loop();
@@ -28,6 +29,7 @@ function start_loop() {
     if (!($("#text-box").text() === "")) {
       rt = timer();
       $("#wpm").text("WPM: " + (precisionRound(($("#text-box").text().length/5)/rt,2)));
+      $("#characters").text("# of Characters Typed: " + $("#text-box").text().length)
     } else {
       currentDate = Date.now();
     }
@@ -67,10 +69,18 @@ function cps() {
   timeL = time_loop();
   if (clicks >= 1) {
     $("#text-box").text("");
+    $("#wpm").text("WPM: ");
+    $("#characters").text("# of Characters Typed: ");
     $("#cps").text("Clicks Per Second: " + precisionRound(clicks/timeL,2));
+    $("#top-cps").text("Total Clicks: " + clicks);
+    $("#time-cps").text("Session Time: " + precisionRound(timeL, 2));
     timeR = cps_reset_time_loop()
     if (timeR >= 5) {
       clicks = 0;
+      $("#time-cps").text("Session Time: ")
+    }
+    if (currentTop <  precisionRound(clicks/timeL,2)) {
+      update_click();
     }
   } else if (clicks === 0){
     currentDateL = Date.now();
@@ -78,4 +88,8 @@ function cps() {
   }
   cps();
   }, 10);
+}
+
+function update_click() {
+  $("#top-cps").text("Total Clicks: " + clicks);
 }

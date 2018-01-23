@@ -1,5 +1,5 @@
 body {
-  background-color: #ff5656;
+  background-color: #aef99f;
 }
 
 #text-box {
@@ -11,6 +11,7 @@ body {
   background-color: #222;
   color: white;
   padding: 5px;
+  border: 2px dotted white;
 }
 
 #text-box:focus {
@@ -26,6 +27,7 @@ body {
   background-color: #222;
   color: white;
   padding: 5px;
+  border: 2px dotted white;
 }
 
 #whole {
