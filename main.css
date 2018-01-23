@@ -1,0 +1,57 @@
+body {
+  background-color: #ff5656;
+}
+
+#text-box {
+  width: 600px;
+  height: 500px;
+  top:0;left:0;right:500;bottom:0;
+  position: absolute;
+  margin: auto;
+  background-color: #222;
+  color: white;
+  padding: 5px;
+}
+
+#text-box:focus {
+  outline: none;
+}
+
+#info-box {
+  width: 250px;
+  height: 500px;
+  top:0;left:500px;right:0;bottom:0;
+  position: absolute;
+  margin: auto;
+  background-color: #222;
+  color: white;
+  padding: 5px;
+}
+
+#whole {
+  width: 1000px;
+  height: 100%;
+  top:0;left:0;right:0;bottom:0;
+  position: absolute;
+  margin: auto;
+}
+#click-box {
+  width: 100px;
+  height: 100px;
+  background-color: #222;
+  border: 1px dashed white;
+  left: 0;
+  right: 0;
+  position: absolute;
+  margin: auto;
+}
+
+#click-box:active {
+  border: 1px solid white;
+  width: 110px;
+  height: 110px;
+}
+
+#click-box:focus {
+  outline: none;
+}
