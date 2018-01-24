@@ -12,7 +12,12 @@ var textbox = "";
 var clicks = 0;
 var timeL = 0;
 var currentTop = 0;
+
 $(document).ready(function() {
+  var element = document.getElementById("text-box");
+  element.spellcheck = false;
+  element.focus();
+  element.blur();
   currentDate = Date.now();
   start_loop();
   cps();
@@ -29,9 +34,11 @@ function start_loop() {
     if (!($("#text-box").text() === "")) {
       rt = timer();
       $("#wpm").text("WPM: " + (precisionRound(($("#text-box").text().length/5)/rt,2)));
-      $("#characters").text("# of Characters Typed: " + $("#text-box").text().length)
+      $("#characters").text("# of Characters Typed: " + $("#text-box").text().length);
     } else {
       currentDate = Date.now();
+      $("#wpm").text("WPM: ");
+      $("#characters").text("# of Characters Typed: ");
     }
     start_loop();
   },10);
@@ -75,9 +82,10 @@ function cps() {
     $("#top-cps").text("Total Clicks: " + clicks);
     $("#time-cps").text("Session Time: " + precisionRound(timeL, 2));
     timeR = cps_reset_time_loop()
-    if (timeR >= 5) {
+    if (timeR >= 3) {
       clicks = 0;
       $("#time-cps").text("Session Time: ")
+      $("#top-cps").text("Total Clicks: ");
     }
     if (currentTop <  precisionRound(clicks/timeL,2)) {
       update_click();

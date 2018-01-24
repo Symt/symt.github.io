@@ -11,7 +11,8 @@ body {
   background-color: #222;
   color: white;
   padding: 5px;
-  border: 2px dotted white;
+  border: 4px groove white;
+  overflow: auto;
 }
 
 #text-box:focus {
@@ -27,7 +28,7 @@ body {
   background-color: #222;
   color: white;
   padding: 5px;
-  border: 2px dotted white;
+  border: 4px groove white;
 }
 
 #whole {
