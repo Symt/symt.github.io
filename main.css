@@ -3,9 +3,9 @@ body {
 }
 
 #text-box {
-  width: 600px;
+  width: 425px;
   height: 500px;
-  top:0;left:0;right:500;bottom:0;
+  top:0;left:-100px;right:0;bottom:0;
   position: absolute;
   margin: auto;
   background-color: #222;
@@ -19,10 +19,20 @@ body {
   outline: none;
 }
 
+
+#word-box h2 {
+  text-align: center;
+  font-size: 24px;
+}
+
+#word-box p {
+  text-align: center;
+}
+
 #info-box {
   width: 250px;
   height: 500px;
-  top:0;left:500px;right:0;bottom:0;
+  top:0;left:600px;right:0;bottom:0;
   position: absolute;
   margin: auto;
   background-color: #222;
@@ -30,7 +40,17 @@ body {
   padding: 5px;
   border: 4px groove white;
 }
-
+#word-box {
+  width: 250px;
+  height: 500px;
+  top:0;left:-800px;right:0;bottom:0;
+  position: absolute;
+  margin: auto;
+  background-color: #222;
+  color: white;
+  padding: 5px;
+  border: 4px groove white;
+}
 #whole {
   width: 1000px;
   height: 100%;
