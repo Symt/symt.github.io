@@ -78,6 +78,7 @@ body {
   border: 1px dashed white;
   left: 0;
   right: 0;
+  bottom: 10%;
   position: absolute;
   margin: auto;
 }
