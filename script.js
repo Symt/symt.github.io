@@ -158,9 +158,13 @@ function word_bank_shuffle() {
 text = "";
 for (var i = 0; i < 20; i++) {
   randInt = randomGenerator();
-  stripped_text[i] = full_bank[randInt];
-  id_name = "word" + i;
-  text += "<span id=\"" + id_name + "\">" + full_bank[randInt] + "</span><br/>";
+  if (stripped_text.indexOf(full_bank[randInt]) == -1 || undefined) {
+    stripped_text[i] = full_bank[randInt];
+    id_name = "word" + i;
+    text += "<span id=\"" + id_name + "\">" + full_bank[randInt] + "</span><br/>";
+  } else {
+    i--;
+  }
 }
 $("#words").html(text);
 }
