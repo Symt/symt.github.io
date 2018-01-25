@@ -25,7 +25,7 @@ body {
   width: 20%;
   height: 50px;
   text-decoration: none;
-  
+
 }
 
 #text-box:focus {
@@ -84,8 +84,8 @@ body {
 
 #click-box:active {
   border: 1px solid white;
-  width: 110px;
-  height: 110px;
+  width: 40%;
+  height: 22%;
 }
 
 #click-box:focus {
