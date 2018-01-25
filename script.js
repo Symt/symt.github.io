@@ -81,7 +81,7 @@ function start_loop() {
       }
     } else {
       currentDate = Date.now();
-      currentDateL = Date.now();
+      currentDateW = Date.now();
       $("#wpm").text("WPM: ");
       $("#characters").text("# of Characters Typed: ");
     }
