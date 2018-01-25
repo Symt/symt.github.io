@@ -2,6 +2,7 @@ var currentDate,
     time,
     rt,
     total_characters,
+    currentDateS,
     currentDateL,
     currentDateW,
     currentDateR,
@@ -15,6 +16,7 @@ var clicks = 0;
 var timeL = 0;
 var currentTop = 0;
 var text = "";
+var timeS = 0;
 var stripped_text = [];
 
 // WORD BANKS
@@ -59,6 +61,7 @@ $(document).ready(function() {
   element.blur();
   currentDate = Date.now();
   currentDateW = Date.now();
+  currentDateS = Date.now();
   word_bank_shuffle();
   start_loop();
   cps();
@@ -76,6 +79,7 @@ function start_loop() {
       rt = timer();
       $("#wpm").text("WPM: " + (precisionRound(($("#text-box").text().length/5)/rt,2)));
       $("#characters").text("# of Characters Typed: " + $("#text-box").text().length);
+      $("#time-cps").text("Session Time: " + session_timer())
       timeW = word_loop();
       remove_words();
       if (timeW >= 6) {
@@ -86,6 +90,7 @@ function start_loop() {
     } else {
       currentDate = Date.now();
       currentDateW = Date.now();
+      currentDateS = Date.now();
       $("#wpm").text("WPM: ");
       $("#characters").text("# of Characters Typed: ");
     }
@@ -97,6 +102,12 @@ function timer() {
   time = (Date.now() - currentDate)/60000
   time = precisionRound(time,2);
   return time;
+}
+
+function session_timer() {
+  timeS = (Date.now() - currentDateS)/1000
+  timeS = precisionRound(timeS,2);
+  return timeS;
 }
 
 function time_loop() {
