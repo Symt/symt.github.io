@@ -14,7 +14,14 @@ body {
   border: 4px groove white;
   overflow: auto;
 }
-
+h3 {
+  margin: auto;
+  position: absolute;
+  top:-85%;left:0;right:0;bottom:0;
+  text-align: center;
+  width: 20%;
+  height: 10%;
+}
 #github {
   left:0;right:0;bottom:0;
   text-align: center;
@@ -22,10 +29,9 @@ body {
   position: absolute;
   color: black;
   text-align: center;
-  width: 20%;
-  height: 50px;
+  width: 15%;
+  height: 40px;
   text-decoration: none;
-
 }
 
 #text-box:focus {
