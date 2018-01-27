@@ -19,7 +19,7 @@ h3 {
   position: absolute;
   top:-85%;left:0;right:0;bottom:0;
   text-align: center;
-  width: 20%;
+  width: 200px;
   height: 10%;
 }
 #github {
@@ -29,8 +29,8 @@ h3 {
   position: absolute;
   color: black;
   text-align: center;
-  width: 15%;
-  height: 40px;
+  width: 170px;
+  height: 5%;
   text-decoration: none;
 }
 

@@ -9,7 +9,9 @@ var currentDate,
     id_name,
     textBoxData,
     index_to_remove,
-    ranlen;
+    ranlen,
+    current_wpm,
+    best_wpm;
 var timeR = 0;
 var remove = false;
 var textbox = "";
@@ -20,7 +22,8 @@ var text = "";
 var timeS = 0;
 var stripped_text = [];
 var stripped_text_left = [];
-var fullbank;
+var fullbank = [];
+var correct_words = 0;
 
 
 $(document).ready(function() {
@@ -45,6 +48,11 @@ $(document).ready(function() {
     clicks++;
     currentDateR = Date.now();
   });
+  $("body").on("keypress", (evt) => {
+    if (evt.which == 32) {
+      remove_words();
+    }
+  });
 
 });
 
@@ -53,15 +61,13 @@ function start_loop() {
   setTimeout(function() {
     if (!($("#text-box").text() === "")) {
       rt = timer();
-      $("#wpm").text("WPM: " + (precisionRound(($("#text-box").text().length/5)/rt,2)));
-      $("#characters").text("# of Characters Typed: " + $("#text-box").text().length);
+      $("#wpm").text("WPM: " + (precisionRound((($("#text-box").text().length/5)/rt),2)));
+      updateWPM();
       $("#time-cps").text("Session Time: " + session_timer())
-      remove_words();
     } else {
       currentDate = Date.now();
       currentDateS = Date.now();
       $("#wpm").text("WPM: ");
-      $("#characters").text("# of Characters Typed: ");
     }
     start_loop();
   },10);
@@ -104,7 +110,6 @@ function cps() {
   if (clicks >= 1) {
     $("#text-box").text("");
     $("#wpm").text("WPM: ");
-    $("#characters").text("# of Characters Typed: ");
     $("#cps").text("Clicks Per Second: " + precisionRound(clicks/timeL,2));
     $("#top-cps").text("Total Clicks: " + clicks);
     $("#time-cps").text("Session Time: " + precisionRound(timeL, 2));
@@ -150,13 +155,13 @@ function remove_words() {
   id_name = "";
   textBoxData = $("#text-box").text().split(" ");
   for (var y = 0; y < stripped_text.length; y++) {
-      if (stripped_text[y] == textBoxData[textBoxData.length-1]) {
+      if (stripped_text[y] == textBoxData[textBoxData.length-1].toLowerCase()) {
         remove = true;
         index_to_remove = y;
     }
-  }
-
+      }
   if (remove) {
+    correct_words+=1
     text = "";
     stripped_text_left.splice(index_to_remove,1);
     remove = false;
@@ -174,4 +179,18 @@ function randomGenerator() {
 }
 function randomAll(len) {
   return Math.floor(Math.random() * len);
+}
+
+function updateWPM() {
+  current_wpm = precisionRound(($("#text-box").text().length/5)/rt,2);
+  if (rt*60 >= 5) {
+    if (current_wpm >= best_wpm || best_wpm === undefined) {
+      best_wpm = current_wpm;
+      $("#characters").text("Best WPM: " + best_wpm);
+    }
+  }
+  if (rt >= 1) {
+    $("#text-box").text("");
+    alert("Congrats! \nYou finished with " + current_wpm + " wpm\nAt your best, you typed " + best_wpm + " wpm");
+  }
 }
