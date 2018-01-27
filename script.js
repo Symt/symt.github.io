@@ -8,7 +8,8 @@ var currentDate,
     randInt,
     id_name,
     textBoxData,
-    index_to_remove;
+    index_to_remove,
+    ranlen;
 var timeR = 0;
 var remove = false;
 var textbox = "";
@@ -23,7 +24,14 @@ var fullbank;
 
 
 $(document).ready(function() {
-
+  ranlen = randomAll(3)
+  if (ranlen == 0) {
+    $('body').css("background-color","#aef99f");
+  } else if (ranlen == 1) {
+    $('body').css("background-color","#96beff");
+  } else if (ranlen == 2) {
+    $('body').css("background-color","#e55454");
+  }
   var element = document.getElementById("text-box");
   element.spellcheck = false;
   element.focus();
@@ -49,9 +57,6 @@ function start_loop() {
       $("#characters").text("# of Characters Typed: " + $("#text-box").text().length);
       $("#time-cps").text("Session Time: " + session_timer())
       remove_words();
-      if (stripped_text_left.length == 0) {
-        word_bank_shuffle();
-      }
     } else {
       currentDate = Date.now();
       currentDateS = Date.now();
@@ -166,4 +171,7 @@ function remove_words() {
 
 function randomGenerator() {
   return Math.floor(Math.random() * full_bank.length);
+}
+function randomAll(len) {
+  return Math.floor(Math.random() * len);
 }
