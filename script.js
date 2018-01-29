@@ -156,7 +156,7 @@ function remove_words() {
   id_name = "";
   textBoxData = $("#text-box").text().split(" ");
   for (var y = 0; y < stripped_text.length; y++) {
-      if (stripped_text[y] == textBoxData[textBoxData.length-1].toLowerCase()) {
+      if (stripped_text[y].toLowerCase() == textBoxData[textBoxData.length-1].toLowerCase()) {
         remove = true;
         index_to_remove = y;
     }
