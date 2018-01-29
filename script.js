@@ -63,11 +63,12 @@ function start_loop() {
       rt = timer();
       $("#wpm").text("WPM: " + (precisionRound((($("#text-box").text().length/5)/rt),2)));
       updateWPM();
-      $("#time-cps").text("Session Time: " + session_timer())
+      $("#time-cps").text("Session Time: " + (precisionRound(60-session_timer(),2)));
     } else {
       currentDate = Date.now();
       currentDateS = Date.now();
       $("#wpm").text("WPM: ");
+      $("#time-cps").text("Session Time: ");
     }
     start_loop();
   },10);
@@ -165,9 +166,19 @@ function remove_words() {
     text = "";
     stripped_text_left.splice(index_to_remove,1);
     remove = false;
-    stripped_text_left[stripped_text_left.length] = full_bank[randomGenerator()];
+    randInt = randomGenerator();
+    while (true) {
+
+      if (stripped_text_left.indexOf(full_bank[randInt]) == -1 || undefined) {
+        stripped_text_left[stripped_text_left.length] = full_bank[randInt];
+        break;
+      } else {
+        randInt = randomGenerator();
+    }
+
+  }
+
     for (var p = 0; p < stripped_text_left.length; p++) {
-      stripped_text_left[p];
       text += "<span id=\"word" + p + "\">" + stripped_text_left[p] + "</span><br/>";
     }
     $("#words").html(text);
