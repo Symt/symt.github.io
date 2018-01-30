@@ -23,10 +23,15 @@ var timeS = 0;
 var stripped_text = [];
 var stripped_text_left = [];
 var fullbank = [];
-var correct_words = 0;
+var removed_words = [];
+var proper_length = 20;
+var pastHeight;
+var pastWidth;
 
 
 $(document).ready(function() {
+  $("#click-box").width($("#info-box").width()/3);
+  $("#click-box").height($("#info-box").height()/5);
   ranlen = randomAll(3)
   if (ranlen == 0) {
     $('body').css("background-color","#aef99f");
@@ -44,6 +49,10 @@ $(document).ready(function() {
   word_bank_shuffle();
   start_loop();
   cps();
+  pastHeight = $("#word-box").height();
+  pastWidth = $("#info-box").width();
+  update_height();
+  update_width();
   $("#click-box").on("click", function() {
     clicks++;
     currentDateR = Date.now();
@@ -137,7 +146,8 @@ function update_click() {
 
 function word_bank_shuffle() {
 text = "";
-for (var i = 0; i < 20; i++) {
+proper_length = ($("#word-box").height()-$("#word-title").height()) / 22;
+for (var i = 0; i < proper_length; i++) {
   randInt = randomGenerator();
   if (stripped_text.indexOf(full_bank[randInt]) == -1 || undefined) {
     stripped_text[i] = full_bank[randInt];
@@ -162,7 +172,6 @@ function remove_words() {
     }
       }
   if (remove) {
-    correct_words+=1
     text = "";
     stripped_text_left.splice(index_to_remove,1);
     remove = false;
@@ -199,9 +208,31 @@ function updateWPM() {
       best_wpm = current_wpm;
       $("#characters").text("Best WPM: " + best_wpm);
     }
-  }
+}
   if (rt >= 1) {
     $("#text-box").text("");
     alert("Congrats! \nYou finished with " + current_wpm + " wpm\nAt your best, you typed " + best_wpm + " wpm");
   }
+}
+
+
+function update_height() {
+  setTimeout(function() {
+    if ($("#word-box").height() != pastHeight) {
+      word_bank_shuffle();
+      pastHeight = $("#word-box").height();
+      $("#click-box").height($("#info-box").height()/5);
+    }
+    update_height();
+  },100);
+}
+
+function update_width() {
+  setTimeout(function() {
+    if ($("#info-box").width() != pastWidth) {
+      pastWidth = $("#info-fox").height();
+      $("#click-box").width($("#info-box").width()/3);
+    }
+    update_width();
+  },100);
 }
