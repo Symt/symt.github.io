@@ -3,8 +3,6 @@ var currentDate,
     rt,
     total_characters,
     currentDateS,
-    currentDateL,
-    currentDateR,
     randInt,
     id_name,
     textBoxData,
@@ -27,11 +25,10 @@ var removed_words = [];
 var proper_length = 20;
 var pastHeight;
 var pastWidth;
+var errors = 0;
 
 
 $(document).ready(function() {
-  $("#click-box").width($("#info-box").width()/3);
-  $("#click-box").height($("#info-box").height()/5);
   ranlen = randomAll(3)
   if (ranlen == 0) {
     $('body').css("background-color","#aef99f");
@@ -48,16 +45,13 @@ $(document).ready(function() {
   currentDateS = Date.now();
   word_bank_shuffle();
   start_loop();
-  cps();
   pastHeight = $("#word-box").height();
   pastWidth = $("#info-box").width();
   update_height();
-  update_width();
-  $("#click-box").on("click", function() {
-    clicks++;
-    currentDateR = Date.now();
-  });
   $("body").on("keypress", (evt) => {
+    if ($("#finish_popup").css("display") == "block") {
+      return false;
+    }
     if (evt.which == 32) {
       remove_words();
     }
@@ -77,7 +71,7 @@ function start_loop() {
       currentDate = Date.now();
       currentDateS = Date.now();
       $("#wpm").text("WPM: ");
-      $("#time-cps").text("Session Time: ");
+      $("#time-cps").text("Session Time: 60.00");
     }
     start_loop();
   },10);
@@ -95,57 +89,16 @@ function session_timer() {
   return timeS;
 }
 
-function time_loop() {
-  timeL = (Date.now() - currentDateL)/1000;
-  timeL = precisionRound(timeL,2);
-  return timeL;
-}
-
-
-function cps_reset_time_loop() {
-  timeR = (Date.now() - currentDateR)/1000;
-  timeR = precisionRound(timeR,2);
-  return timeR;
-}
-
 function precisionRound(number, precision) {
   var factor = Math.pow(10, precision);
   return Math.round(number * factor) / factor;
 }
 
 
-function cps() {
-  setTimeout(function() {
-  timeL = time_loop();
-  if (clicks >= 1) {
-    $("#text-box").text("");
-    $("#wpm").text("WPM: ");
-    $("#cps").text("Clicks Per Second: " + precisionRound(clicks/timeL,2));
-    $("#top-cps").text("Total Clicks: " + clicks);
-    $("#time-cps").text("Session Time: " + precisionRound(timeL, 2));
-    timeR = cps_reset_time_loop()
-    if (timeR >= 3) {
-      clicks = 0;
-      $("#time-cps").text("Session Time: ")
-      $("#top-cps").text("Total Clicks: ");
-    }
-    if (currentTop <  precisionRound(clicks/timeL,2)) {
-      update_click();
-    }
-  } else if (clicks === 0){
-    currentDateL = Date.now();
-    $("#cps").text("Clicks Per Second: ");
-  }
-  cps();
-  }, 10);
-}
-
-function update_click() {
-  $("#top-cps").text("Total Clicks: " + clicks);
-}
 
 function word_bank_shuffle() {
 text = "";
+stripped_text = [];
 proper_length = ($("#word-box").height()-$("#word-title").height()) / 22;
 for (var i = 0; i < proper_length; i++) {
   randInt = randomGenerator();
@@ -154,10 +107,14 @@ for (var i = 0; i < proper_length; i++) {
     stripped_text_left = stripped_text;
     id_name = "word" + i;
     text += "<span id=\"" + id_name + "\">" + full_bank[randInt] + "</span><br/>";
+    if (stripped_text.length >= Math.floor(proper_length)) {
+      break;
+    }
   } else {
     i--;
   }
 }
+
 $("#words").html(text);
 }
 
@@ -172,6 +129,11 @@ function remove_words() {
     }
       }
   if (remove) {
+    if (Math.floor(($("#word-box").height()-$("#word-title").height()) / 22)+1 < stripped_text_left.length) {
+      console.warn("WARNING: stripped_text_left exceeds maximum length\n\nIf you are seeing this error, it is because of an issue with resolution changes.\n\nReshuffling words to fix.\n\n");
+      word_bank_shuffle();
+      return;
+    }
     text = "";
     stripped_text_left.splice(index_to_remove,1);
     remove = false;
@@ -191,6 +153,8 @@ function remove_words() {
       text += "<span id=\"word" + p + "\">" + stripped_text_left[p] + "</span><br/>";
     }
     $("#words").html(text);
+  } else {
+    errors += 1;
   }
 }
 
@@ -211,7 +175,11 @@ function updateWPM() {
 }
   if (rt >= 1) {
     $("#text-box").text("");
-    alert("Congrats! \nYou finished with " + current_wpm + " wpm\nAt your best, you typed " + best_wpm + " wpm");
+    $("#best").text("Best WPM: " + best_wpm);
+    $("#raw").text("Raw WPM: " + current_wpm);
+    $("#errors").text("Total Errors: " + errors);
+    $("#final").text("Final WPM: " + (current_wpm - (errors*5)));
+    document.getElementById("finish_popup").style.display = "block";
   }
 }
 
@@ -221,18 +189,13 @@ function update_height() {
     if ($("#word-box").height() != pastHeight) {
       word_bank_shuffle();
       pastHeight = $("#word-box").height();
-      $("#click-box").height($("#info-box").height()/5);
     }
     update_height();
   },100);
 }
-
-function update_width() {
-  setTimeout(function() {
-    if ($("#info-box").width() != pastWidth) {
-      pastWidth = $("#info-fox").height();
-      $("#click-box").width($("#info-box").width()/3);
+window.onclick = function(event) {
+    if (event.target == document.getElementById("finish_popup")) {
+      rt = 0;
+        document.getElementById("finish_popup").style.display = "none";
     }
-    update_width();
-  },100);
 }
