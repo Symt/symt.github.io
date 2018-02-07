@@ -178,7 +178,7 @@ function updateWPM() {
     $("#best").text("Best WPM: " + best_wpm);
     $("#raw").text("Raw WPM: " + current_wpm);
     $("#errors").text("Total Errors: " + errors);
-    $("#final").text("Final WPM: " + (current_wpm - (errors*5)));
+    $("#final").text("Final WPM: " + (precisionRound(current_wpm - (errors*5),2)));
     document.getElementById("finish_popup").style.display = "block";
   }
 }
