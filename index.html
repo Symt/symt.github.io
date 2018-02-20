@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- Start of Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114289054-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<head>
+	<!-- Start of Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114289054-1">
+	</script>
+	<script>
+	     window.dataLayer = window.dataLayer || [];
+	     function gtag(){dataLayer.push(arguments);}
+	     gtag('js', new Date());
 
-      gtag('config', 'UA-114289054-1');
-    </script>
-    <!-- End of Google Analytics -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free and Easy Typing Test</title>
-    <link rel="stylesheet" href="main.css" />
-    <script src="jquery-3.3.1.min.js"></script>
-    <script src="words.js"></script>
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="whole">
-    <div contenteditable="true" id="text-box" oncopy="return false" oncut="return false" onpaste="return false"></div>
-    <div id="word-box" onmousedown="event.preventDefault ? event.preventDefault() : event.returnValue = false">
-      <h2 id="word-title">Word Bank</h2>
-      <p id="words"></p>
-    </div>
-    <h3 id="title" >Typing Test</h3>
-    <a id="github" href="https://github.com/symt/symt.github.io">Check out the source code</a>
-    <div id="info-box">
-      <p id="wpm">WPM: </p>
-    <br/>
-      <p id="characters">Best WPM: </p>
-    <br/>
-      <p id="time-cps">Session Time: 60.00</p>
-    </div>
-  </div>
-
-  <div id="finish_popup" class="popup">
-  <div class="popup-content">
-    <div class="popup-header">
-      <h2>Results</h2>
-    </div>
-    <div class="popup-body">
-      <p id="best">Best WPM: </p>
-      <p id="raw">Raw WPM: </p>
-      <p id="errors">Total Errors: </p>
-      <p id="final">Final WPM: </p>
-    </div>
-  </div>
-
-</div>
-  </body>
+	     gtag('config', 'UA-114289054-1');
+	</script>
+  <!-- End of Google Analytics -->
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<title>Free and Easy Typing Test</title>
+	<link href="main.css" rel="stylesheet">
+	<script src="jquery-3.3.1.min.js">
+	</script>
+	<script src="words.js">
+	</script>
+	<script src="chart.js">
+	</script>
+	<script src="script.js">
+	</script>
+</head>
+<body>
+	<div id="whole">
+		<div contenteditable="true" id="text-box"></div>
+		<div id="word-box" onmousedown="event.preventDefault ? event.preventDefault() : event.returnValue = false">
+			<h2 id="word-title">Word Bank</h2>
+			<p id="words"></p>
+		</div>
+		<h3 id="title">Typing Test</h3><a href="https://github.com/symt/symt.github.io" id="github">Check out the source code</a>
+		<div id="info-box">
+			<p id="wpm">WPM:</p><br>
+			<p id="characters">Best WPM:</p><br>
+			<p id="time-cps">Session Time: 60.00</p>
+		</div>
+	</div>
+	<div class="popup" id="finish_popup">
+		<div class="popup-content">
+			<div class="popup-body">
+				<canvas id="chart" style='width: "10vw"; height: "10vh"'></canvas><button id="stats">In-Depth Stats</button> <button id="close">&#10006;</button>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
