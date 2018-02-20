@@ -187,6 +187,12 @@ function updateWPM() {
 				wpmFormat.push(wpm[Math.ceil(i * wpm.length / 60)]);
 			}
 		}
+			while (wpmFormat.length <= 61) {
+				if (wpmFormat.length == 61) {
+					break;
+				}
+			wpmFormat.push(wpm[wpm.length - (61-wpmFormat.length)]);
+		}
 		var sum = 0;
 		for (var i = 0; i < wpm.length; i++) {
 			sum += wpm[i];
