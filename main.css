@@ -141,9 +141,9 @@ h3 {
   margin: auto;
   position: absolute;
   border: 2px solid black;
-  width: 100px;
   height: 30px;
   text-align: center;
+  background-color: inherit;
 }
 #stats:hover {
   background-color: #e6e6e6;
