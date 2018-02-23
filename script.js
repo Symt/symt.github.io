@@ -33,9 +33,9 @@ var errors = 0;
 $(document).ready(function() {
 	ranlen = randomAll(3)
 	if (ranlen == 0) {
-		$('body').css("background-color", "#aef99f");
+		$('body').css("background-color", "#e6e6e6");
 	} else if (ranlen == 1) {
-		$('body').css("background-color", "#96beff");
+		$('body').css("background-color", "#ff9b5e");
 	} else if (ranlen == 2) {
 		$('body').css("background-color", "#e55454");
 	}
