@@ -13,27 +13,33 @@ var currentDate,
 	wpm = [],
 	labels = [],
 	avr = 0,
-	final = 0;
-var timeR = 0;
-var remove = false;
-var textbox = "";
-var clicks = 0;
-var timeL = 0;
-var currentTop = 0;
-var text = "";
-var timeS = 0;
-var stripped_text = [];
-var stripped_text_left = [];
-var fullbank = [];
-var removed_words = [];
-var proper_length = 20;
-var pastHeight;
-var pastWidth;
-var errors = 0;
+	final = 0,
+	midline,
+	wpmDatasets = [0],
+	timeR = 0,
+	remove = false,
+	textbox = "",
+	clicks = 0,
+	timeL = 0,
+	currentTop = 0,
+	text = "",
+	timeS = 0,
+	stripped_text = [],
+	stripped_text_left = [],
+	fullbank = [],
+	removed_words = [],
+	proper_length = 20,
+	pastHeight,
+	pastWidth,
+	errors = 0,
+	count = 0,
+	the_chart,
+	sum = 0,
+	midline_data = [];
 $(document).ready(function() {
 	ranlen = randomAll(3)
 	if (ranlen == 0) {
-		$('body').css("background-color", "#e6e6e6");
+		$('body').css("background-color", "#96ace8");
 	} else if (ranlen == 1) {
 		$('body').css("background-color", "#ff9b5e");
 	} else if (ranlen == 2) {
@@ -187,32 +193,50 @@ function updateWPM() {
 				wpmFormat.push(wpm[Math.ceil(i * wpm.length / 60)]);
 			}
 		}
+		for (var i = 0; i < wpm.length; i++) {
+			sum += wpm[i];
+			count++;
+		}
+		final = wpm[wpm.length - 1];
+		avr = precisionRound(sum / count, 2);
 			while (wpmFormat.length <= 61) {
 				if (wpmFormat.length == 61) {
 					break;
 				}
 			wpmFormat.push(wpm[wpm.length - (61-wpmFormat.length)]);
 		}
-		var sum = 0;
-		for (var i = 0; i < wpm.length; i++) {
-			sum += wpm[i];
+		midline_data = [];
+		midline_data.push(avr)
+		while (midline_data.length <= 61) {
+			if (midline_data.length == 61) {
+				break;
+			}
+			midline_data.push(avr);
 		}
-		final = wpm[wpm.length - 1];
-		avr = precisionRound(sum / wpm.length, 2);
-		sum = 0;
+		var randomint = [randomAll(255), randomAll(255), randomAll(255)];
+		var datasets = {
+			label: "WPM " + wpmDatasets.length,
+			backgroundColor: 'rgb(' + randomint[0] + ',' + randomint[1] + ',' + randomint[2] + ')',
+			borderColor: 'rgb(' + randomint[0] + ',' + randomint[1] + ',' + randomint[2] + ')',
+			data: wpmFormat,
+			fill: false,
+		}
+			midline = {
+				label: "Midline",
+				backgroundColor: 'rgb(0,0,0)',
+				borderColor: 'rgb(0,0,0)',
+				data: midline_data,
+				fill: false,
+			}
+		wpmDatasets.push(datasets);
+		wpmDatasets[0] = midline;
 		document.getElementById("finish_popup").style.display = "block";
 		var ctx = document.getElementById("chart").getContext('2d');
 		var config = {
 			type: 'line',
 			data: {
 				labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"],
-				datasets: [{
-					label: "WPM",
-					backgroundColor: $('body').css("background-color"),
-					borderColor: $('body').css("background-color"),
-					data: wpmFormat,
-					fill: false,
-				}]
+				datasets: []
 			},
 			options: {
 				elements: {
@@ -243,7 +267,9 @@ function updateWPM() {
 				}
 			}
 		}
-		var the_chart = new Chart(ctx, config);
+		if (the_chart == null || the_chart == undefined)  the_chart = new Chart(ctx, config);
+		the_chart.data.datasets = wpmDatasets;
+		the_chart.update();
 		labels = [];
 		wpm = [];
 	}
@@ -257,10 +283,4 @@ function update_height() {
 		}
 		update_height();
 	}, 100);
-}
-window.onclick = function(event) {
-	if (event.target == document.getElementById("finish_popup")) {
-		rt = 0;
-		document.getElementById("finish_popup").style.display = "none";
-	}
 }
