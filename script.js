@@ -66,6 +66,7 @@ $(document).ready(function() {
 	});
 	$("#stats").on('click', function() {
 		alert("Best WPM: " + best_wpm + "\nAverage WPM: " + avr + "\nFinal WPM w/ Errors: " + (precisionRound(final - (errors * 5), 2)));
+		errors = 0
 	});
 	$("#close").on('click', function() {
 		document.getElementById("finish_popup").style.display = "none";
@@ -214,6 +215,9 @@ function updateWPM() {
 			midline_data.push(avr);
 		}
 		var randomint = [randomAll(255), randomAll(255), randomAll(255)];
+		while ((randomint[0] + randomint[1] + randomint[2]) >= 500) {
+			randomint = [randomAll(255), randomAll(255), randomAll(255)];
+		}
 		var datasets = {
 			label: "WPM " + wpmDatasets.length,
 			backgroundColor: 'rgb(' + randomint[0] + ',' + randomint[1] + ',' + randomint[2] + ')',
