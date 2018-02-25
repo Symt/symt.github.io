@@ -1,7 +1,6 @@
 var currentDate,
 	time,
 	rt,
-	total_characters,
 	currentDateS,
 	randInt,
 	id_name,
@@ -16,18 +15,11 @@ var currentDate,
 	final = 0,
 	midline,
 	wpmDatasets = [0],
-	timeR = 0,
 	remove = false,
-	textbox = "",
-	clicks = 0,
-	timeL = 0,
-	currentTop = 0,
 	text = "",
 	timeS = 0,
 	stripped_text = [],
 	stripped_text_left = [],
-	fullbank = [],
-	removed_words = [],
 	proper_length = 20,
 	pastHeight,
 	pastWidth,
@@ -37,8 +29,8 @@ var currentDate,
 	sum = 0,
 	midline_data = [];
 $(document).ready(function() {
-	ranlen = randomAll(3)
-	if (ranlen == 0) {
+	ranlen = randomAll(3);
+	if (ranlen === 0) {
 		$('body').css("background-color", "#96ace8");
 	} else if (ranlen == 1) {
 		$('body').css("background-color", "#ff9b5e");
@@ -56,7 +48,7 @@ $(document).ready(function() {
 	pastHeight = $("#word-box").height();
 	pastWidth = $("#info-box").width();
 	update_height();
-	$("body").on("keypress", (evt) => {
+	$("body").on("keypress", function(evt) {
 		if ($("#finish_popup").css("display") == "block") {
 			return false;
 		}
@@ -66,7 +58,7 @@ $(document).ready(function() {
 	});
 	$("#stats").on('click', function() {
 		alert("Best WPM: " + best_wpm + "\nAverage WPM: " + avr + "\nFinal WPM w/ Errors: " + (precisionRound(final - (errors * 5), 2)));
-		errors = 0
+		errors = 0;
 	});
 	$("#close").on('click', function() {
 		document.getElementById("finish_popup").style.display = "none";
@@ -76,7 +68,7 @@ $(document).ready(function() {
 
 function start_loop() {
 	setTimeout(function() {
-		if (!($("#text-box").text() === "")) {
+		if ($("#text-box").text() !== "") {
 			rt = timer();
 			$("#wpm").text("WPM: " + (precisionRound((($("#text-box").text().length / 5) / rt), 2)));
 			updateWPM();
@@ -92,13 +84,13 @@ function start_loop() {
 }
 
 function timer() {
-	time = (Date.now() - currentDate) / 60000
+	time = (Date.now() - currentDate) / 60000;
 	time = precisionRound(time, 2);
 	return time;
 }
 
 function session_timer() {
-	timeS = (Date.now() - currentDateS) / 1000
+	timeS = (Date.now() - currentDateS) / 1000;
 	timeS = precisionRound(timeS, 2);
 	return timeS;
 }
@@ -188,13 +180,13 @@ function updateWPM() {
 	if (rt >= 1) {
 		$("#text-box").text("");
 		wpm.push(current_wpm);
-		var wpmFormat = []
+		var wpmFormat = [];
 		for (var i = 0; i < 60; i++) {
 			if (wpm[Math.ceil(i * wpm.length / 60)] != wpmFormat[wpmFormat.length - 1]) {
 				wpmFormat.push(wpm[Math.ceil(i * wpm.length / 60)]);
 			}
 		}
-		for (var i = 0; i < wpm.length; i++) {
+		for (i = 0; i < wpm.length; i++) {
 			sum += wpm[i];
 			count++;
 		}
@@ -207,7 +199,7 @@ function updateWPM() {
 			wpmFormat.push(wpm[wpm.length - (61-wpmFormat.length)]);
 		}
 		midline_data = [];
-		midline_data.push(avr)
+		midline_data.push(avr);
 		while (midline_data.length <= 61) {
 			if (midline_data.length == 61) {
 				break;
@@ -224,14 +216,14 @@ function updateWPM() {
 			borderColor: 'rgb(' + randomint[0] + ',' + randomint[1] + ',' + randomint[2] + ')',
 			data: wpmFormat,
 			fill: false,
-		}
-			midline = {
+		};
+		midline = {
 				label: "Midline",
 				backgroundColor: 'rgb(0,0,0)',
 				borderColor: 'rgb(0,0,0)',
 				data: midline_data,
 				fill: false,
-			}
+			};
 		wpmDatasets.push(datasets);
 		wpmDatasets[0] = midline;
 		document.getElementById("finish_popup").style.display = "block";
@@ -270,8 +262,8 @@ function updateWPM() {
 					}]
 				}
 			}
-		}
-		if (the_chart == null || the_chart == undefined)  the_chart = new Chart(ctx, config);
+		};
+		if (the_chart === null || the_chart === undefined)  the_chart = new Chart(ctx, config);
 		the_chart.data.datasets = wpmDatasets;
 		the_chart.update();
 		labels = [];
