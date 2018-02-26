@@ -85,7 +85,7 @@ function start_loop() {
 
 function timer() {
 	time = (Date.now() - currentDate) / 60000;
-	time = precisionRound(time, 2);
+	time = precisionRound(time, 4);
 	return time;
 }
 
