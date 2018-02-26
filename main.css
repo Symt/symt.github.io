@@ -11,7 +11,7 @@ body {
   background-color: #222;
   color: white;
   padding: 5px;
-  border: 4px groove white;
+  border: 4px double white;
   overflow: auto;
 }
 h3 {
@@ -57,7 +57,7 @@ h3 {
   background-color: #222;
   color: white;
   padding: 5px;
-  border: 4px groove white;
+  border: 4px double white;
 }
 #word-box {
   width: 18.5%;
@@ -68,7 +68,7 @@ h3 {
   background-color: #222;
   color: white;
   padding: 5px;
-  border: 4px groove white;
+  border: 4px double white;
 }
 #whole {
   width: 100%;
@@ -98,7 +98,7 @@ h3 {
 
 .popup-content {
     position: absolute;
-    background-color: #fefefe;
+    background-color: #222;
     margin: auto;
     padding: 0;
     border: 1px solid #888;
@@ -140,16 +140,18 @@ h3 {
   left: 25px;
   margin: auto;
   position: absolute;
-  border: 2px solid black;
+  border: 2px solid white;
   height: 30px;
   text-align: center;
   background-color: inherit;
+  color: white;
 }
 #stats:hover {
   background-color: #e6e6e6;
+  color: black;
 }
 #stats:focus {
-  border: 3px solid black;
+  border: 3px solid white;
   outline: none;
 }
 #close {
@@ -164,6 +166,7 @@ h3 {
   height: 25px;
   background-color: inherit;
   border: none;
+  color: white;
 }
 #close:focus {
   outline: none;

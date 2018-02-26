@@ -66,18 +66,29 @@ $(document).ready(function() {
 	});
 });
 
+function pad(n){
+    return (n < 10 ? "0" : "") + n;
+}
+function format() {
+	var tf = (60-session_timer()).toString().split(".");
+	if (tf[1] === undefined || tf[1] === null) {
+		tf[1] = "00";
+	}
+	return (precisionRound(pad(parseInt(tf[0],10)) + "." + pad(parseInt(tf[1],10)),2));
+}
+
 function start_loop() {
 	setTimeout(function() {
 		if ($("#text-box").text() !== "") {
 			rt = timer();
 			$("#wpm").text("WPM: " + (precisionRound((($("#text-box").text().length / 5) / rt), 2)));
 			updateWPM();
-			$("#time-cps").text("Session Time: " + (precisionRound(60 - session_timer(), 2)));
+			$("#time-cps").text("Time: " + format());
 		} else {
 			currentDate = Date.now();
 			currentDateS = Date.now();
 			$("#wpm").text("WPM: ");
-			$("#time-cps").text("Session Time: 60.00");
+			$("#time-cps").text("Time: 60.00");
 		}
 		start_loop();
 	}, 10);
@@ -207,7 +218,7 @@ function updateWPM() {
 			midline_data.push(avr);
 		}
 		var randomint = [randomAll(255), randomAll(255), randomAll(255)];
-		while ((randomint[0] + randomint[1] + randomint[2]) >= 500) {
+		while ((randomint[0] + randomint[1] + randomint[2]) <= 255) {
 			randomint = [randomAll(255), randomAll(255), randomAll(255)];
 		}
 		var datasets = {
@@ -219,8 +230,8 @@ function updateWPM() {
 		};
 		midline = {
 				label: "Midline",
-				backgroundColor: 'rgb(0,0,0)',
-				borderColor: 'rgb(0,0,0)',
+				backgroundColor: 'rgb(255,255,255)',
+				borderColor: 'rgb(255,255,255)',
 				data: midline_data,
 				fill: false,
 			};
@@ -249,12 +260,20 @@ function updateWPM() {
 				},
 				scales: {
 					xAxes: [{
+						gridLines: {
+							display: false,
+							color: "#fff"
+						},
 						scaleLabel: {
 							display: true,
 							labelString: 'Time (s)'
 						},
 					}],
 					yAxes: [{
+						gridLines: {
+							display: false,
+							color: "#FFFFFF"
+						},
 						scaleLabel: {
 							display: true,
 							labelString: 'WPM'
@@ -265,6 +284,7 @@ function updateWPM() {
 		};
 		if (the_chart === null || the_chart === undefined)  the_chart = new Chart(ctx, config);
 		the_chart.data.datasets = wpmDatasets;
+		Chart.defaults.global.defaultFontColor='white';
 		the_chart.update();
 		labels = [];
 		wpm = [];
