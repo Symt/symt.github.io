@@ -37,12 +37,13 @@
 			<p id="wpm">WPM:</p><br>
 			<p id="characters">Best WPM:</p><br>
 			<p id="time-cps">Time: 60.00</p>
+			<button onclick='document.getElementById("finish_popup").style.display = "block";' id="show_stats">Display Stats</button>
 		</div>
 	</div>
 	<div class="popup" id="finish_popup">
 		<div class="popup-content">
 			<div class="popup-body">
-				<canvas id="chart" style='width: "10vw"; height: "10vh"'></canvas><button id="stats">In-Depth Stats</button> <button id="close">&#10006;</button>
+				<canvas id="chart" style='width: "10vw"; height: "10vh"'> If you are seeing this text, that is because Canvas is not supported in your browser.</canvas><button id="stats">In-Depth Stats</button> <button id="close">&#10006;</button>
 			</div>
 		</div>
 	</div>

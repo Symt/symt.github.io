@@ -1,33 +1,35 @@
 var currentDate,
-	time,
-	rt,
-	currentDateS,
-	randInt,
-	id_name,
-	textBoxData,
-	index_to_remove,
-	ranlen,
-	current_wpm,
-	best_wpm,
-	wpm = [],
-	labels = [],
-	avr = 0,
-	final = 0,
-	midline,
-	wpmDatasets = [0],
-	remove = false,
-	text = "",
-	timeS = 0,
-	stripped_text = [],
-	stripped_text_left = [],
-	proper_length = 20,
-	pastHeight,
-	pastWidth,
-	errors = 0,
-	count = 0,
-	the_chart,
-	sum = 0,
-	midline_data = [];
+time,
+rt,
+arrays,
+currentDateS,
+randInt,
+id_name,
+textBoxData,
+index_to_remove,
+ranlen,
+current_wpm,
+best_wpm,
+wpm = [],
+labels = [],
+avr = 0,
+final = 0,
+midline,
+the_sum,
+wpmDatasets = [undefined],
+remove = false,
+text = "",
+timeS = 0,
+stripped_text = [],
+stripped_text_left = [],
+proper_length = 20,
+pastHeight,
+pastWidth,
+errors = 0,
+count = 0,
+the_chart,
+sum = 0,
+midline_data = [];
 $(document).ready(function() {
 	ranlen = randomAll(3);
 	if (ranlen === 0) {
@@ -67,7 +69,7 @@ $(document).ready(function() {
 });
 
 function pad(n){
-    return (n < 10 ? "0" : "") + n;
+	return (n < 10 ? "0" : "") + n;
 }
 function format() {
 	var tf = (60-session_timer()).toString().split(".");
@@ -177,6 +179,7 @@ function randomAll(len) {
 	return Math.floor(Math.random() * len);
 }
 
+
 function updateWPM() {
 	current_wpm = precisionRound(($("#text-box").text().length / 5) / rt, 2);
 	if (rt * 60 >= 5) {
@@ -203,20 +206,13 @@ function updateWPM() {
 		}
 		final = wpm[wpm.length - 1];
 		avr = precisionRound(sum / count, 2);
-			while (wpmFormat.length <= 61) {
-				if (wpmFormat.length == 61) {
-					break;
-				}
-			wpmFormat.push(wpm[wpm.length - (61-wpmFormat.length)]);
-		}
-		midline_data = [];
-		midline_data.push(avr);
-		while (midline_data.length <= 61) {
-			if (midline_data.length == 61) {
+		while (wpmFormat.length <= 61) {
+			if (wpmFormat.length == 61) {
 				break;
 			}
-			midline_data.push(avr);
+			wpmFormat.push(wpm[wpm.length - (61-wpmFormat.length)]);
 		}
+
 		var randomint = [randomAll(255), randomAll(255), randomAll(255)];
 		while ((randomint[0] + randomint[1] + randomint[2]) <= 255) {
 			randomint = [randomAll(255), randomAll(255), randomAll(255)];
@@ -228,67 +224,88 @@ function updateWPM() {
 			data: wpmFormat,
 			fill: false,
 		};
-		midline = {
-				label: "Midline",
-				backgroundColor: 'rgb(255,255,255)',
-				borderColor: 'rgb(255,255,255)',
-				data: midline_data,
-				fill: false,
-			};
 		wpmDatasets.push(datasets);
-		wpmDatasets[0] = midline;
-		document.getElementById("finish_popup").style.display = "block";
-		var ctx = document.getElementById("chart").getContext('2d');
-		var config = {
-			type: 'line',
-			data: {
-				labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"],
-				datasets: []
-			},
-			options: {
-				elements: {
-					point: {
-						radius: 0
-					}
-				},
-				title: {
-					display: true,
-					text: "WPM Throughout Time"
-				},
-				tooltips: {
-					display: false
-				},
-				scales: {
-					xAxes: [{
-						gridLines: {
-							display: false,
-							color: "#fff"
-						},
-						scaleLabel: {
-							display: true,
-							labelString: 'Time (s)'
-						},
-					}],
-					yAxes: [{
-						gridLines: {
-							display: false,
-							color: "#FFFFFF"
-						},
-						scaleLabel: {
-							display: true,
-							labelString: 'WPM'
-						},
-					}]
-				}
+
+		midline_data = [];
+		arrays = [];
+		for (var i = 1; i < wpmDatasets.length; i++) {
+			arrays.push(wpmDatasets[i].data);
+		}
+		for (var i = 0; i < 61; i++) {
+			for (var x = 0; x < arrays.length; x++) {
+				the_sum += arrays[x][i];
 			}
+			the_sum /= arrays.length;
+			midline_data.push(the_sum);
+			the_sum = 0;
+		}
+
+
+		midline = {
+			label: "Average",
+			backgroundColor: 'rgb(255,255,255)',
+			borderColor: 'rgb(255,255,255)',
+			data: midline_data,
+			fill: false,
 		};
-		if (the_chart === null || the_chart === undefined)  the_chart = new Chart(ctx, config);
-		the_chart.data.datasets = wpmDatasets;
-		Chart.defaults.global.defaultFontColor='white';
-		the_chart.update();
-		labels = [];
-		wpm = [];
+		wpmDatasets[0] = midline;
+
+document.getElementById("finish_popup").style.display = "block";
+var ctx = document.getElementById("chart").getContext('2d');
+var config = {
+	type: 'line',
+	data: {
+		labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"],
+		datasets: []
+	},
+	options: {
+		elements: {
+			point: {
+				radius: 0
+			}
+		},
+		title: {
+			display: true,
+			text: "WPM Throughout Time"
+		},
+		tooltips: {
+			display: false
+		},
+		scales: {
+			xAxes: [{
+				gridLines: {
+					display: false,
+					color: "#fff"
+				},
+				scaleLabel: {
+					display: true,
+					labelString: 'Time (s)'
+				},
+			}],
+			yAxes: [{
+				gridLines: {
+					display: false,
+					color: "#FFFFFF"
+				},
+				scaleLabel: {
+					display: true,
+					labelString: 'WPM'
+				},
+			}]
+		}
 	}
+};
+if (the_chart === null || the_chart === undefined)  the_chart = new Chart(ctx, config);
+if (wpmDatasets.length == 2) {
+	the_chart.data.datasets = [wpmDatasets[1], wpmDatasets[0]]
+} else {
+	the_chart.data.datasets = wpmDatasets;
+}
+Chart.defaults.global.defaultFontColor='white';
+the_chart.update();
+labels = [];
+wpm = [];
+}
 }
 
 function update_height() {

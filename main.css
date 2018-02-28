@@ -171,3 +171,21 @@ h3 {
 #close:focus {
   outline: none;
 }
+#show_stats {
+  background-color: #35c64c;
+  border: 1px solid #222;
+  top: 0; left: 0; right: 0; bottom: 0;
+  margin: auto;
+  position: absolute;
+  width: 9vw;
+  height: 5vh;
+}
+#show_stats:hover {
+  background-color: #42f45c;
+}
+#show_stats:focus {
+  outline: none;
+}
+#chart {
+  color: white;
+}
