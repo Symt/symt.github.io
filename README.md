@@ -20,7 +20,7 @@ If there is a bug and it isn't fixed, it will be posted at https://github.com/Sy
 If you find a bug that needs fixing, post it there.
 
 ### Improving Quality
-Things that need to be added
+Things that might be added
 
 - Improved error calculation
 - More Word Lists

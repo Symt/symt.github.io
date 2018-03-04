@@ -1,35 +1,36 @@
 var currentDate,
-    time,
-    rt,
-    arrays,
-    currentDateS,
-    randInt,
-    id_name,
-    textBoxData,
-    index_to_remove,
-    ranlen,
-    current_wpm,
-    best_wpm,
-    wpm = [],
-    labels = [],
-    avr = 0,
-    final = 0,
-    midline,
-    the_sum,
-    wpmDatasets = [undefined],
-    remove = false,
-    text = "",
-    timeS = 0,
-    stripped_text = [],
-    stripped_text_left = [],
-    proper_length = 20,
-    pastHeight,
-    pastWidth,
-    errors = 0,
-    count = 0,
-    the_chart,
-    sum = 0,
-    midline_data = [];
+	time,
+	rt,
+	arrays,
+	currentDateS,
+	randInt,
+	id_name,
+	textBoxData,
+	index_to_remove,
+	ranlen,
+	current_wpm,
+	best_wpm,
+	wpm = [],
+	labels = [],
+	avr = 0,
+	final = 0,
+	midline,
+	the_sum,
+	removed_words = [],
+	wpmDatasets = [undefined],
+	remove = false,
+	text = "",
+	timeS = 0,
+	stripped_text = [],
+	stripped_text_left = [],
+	proper_length = 20,
+	pastHeight,
+	pastWidth,
+	errors = 0,
+	count = 0,
+	the_chart,
+	sum = 0,
+	midline_data = [];
 $(document).ready(function () {
 	ranlen = randomAll(3);
 	if (ranlen === 0) {
@@ -50,7 +51,7 @@ $(document).ready(function () {
 	pastHeight = $("#word-box").height();
 	pastWidth = $("#info-box").width();
 	update_height();
-	$("body").on("keypress", function(evt) {
+	$("body").on("keypress", function (evt) {
 		if ($("#finish_popup").css("display") == "block") {
 			return false;
 		}
@@ -58,29 +59,29 @@ $(document).ready(function () {
 			remove_words();
 		}
 	});
-	$("#stats").on('click', function() {
-		alert("Best WPM: " + best_wpm + "\nAverage WPM: " + avr + "\nFinal WPM w/ Errors: " + (precisionRound(final - (errors * 5), 2)));
-		errors = 0;
+	$("#stats").on('click', function () {
+		alert("Best WPM: " + best_wpm + "\nAverage WPM: " + avr + "\nFinal WPM w/ Errors: " + (precisionRound(final - (final_errors * 5), 2)));
 	});
-	$("#close").on('click', function() {
+	$("#close").on('click', function () {
 		document.getElementById("finish_popup").style.display = "none";
 		rt = 0;
 	});
 });
 
-function pad(n){
+function pad(n) {
 	return (n < 10 ? "0" : "") + n;
 }
+
 function format() {
-	var tf = (60-session_timer()).toString().split(".");
+	var tf = (60 - session_timer()).toString().split(".");
 	if (tf[1] === undefined || tf[1] === null) {
 		tf[1] = "00";
 	}
-	return (precisionRound(pad(parseInt(tf[0],10)) + "." + pad(parseInt(tf[1],10)),2));
+	return (precisionRound(pad(parseInt(tf[0], 10)) + "." + pad(parseInt(tf[1], 10)), 2));
 }
 
 function start_loop() {
-	setTimeout(function() {
+	setTimeout(function () {
 		if ($("#text-box").text() !== "") {
 			rt = timer();
 			$("#wpm").text("WPM: " + (precisionRound((($("#text-box").text().length / 5) / rt), 2)));
@@ -151,6 +152,7 @@ function remove_words() {
 			return;
 		}
 		text = "";
+		add_removed(stripped_text_left[index_to_remove]);
 		stripped_text_left.splice(index_to_remove, 1);
 		remove = false;
 		randInt = randomGenerator();
@@ -166,8 +168,6 @@ function remove_words() {
 			text += "<span id=\"word" + p + "\">" + stripped_text_left[p] + "</span><br/>";
 		}
 		$("#words").html(text);
-	} else {
-		errors += 1;
 	}
 }
 
@@ -192,6 +192,7 @@ function updateWPM() {
 		}
 	}
 	if (rt >= 1) {
+		add_removed("");
 		$("#text-box").text("");
 		wpm.push(current_wpm);
 		var wpmFormat = [];
@@ -210,7 +211,7 @@ function updateWPM() {
 			if (wpmFormat.length == 61) {
 				break;
 			}
-			wpmFormat.push(wpm[wpm.length - (61-wpmFormat.length)]);
+			wpmFormat.push(wpm[wpm.length - (61 - wpmFormat.length)]);
 		}
 
 		var randomint = [randomAll(255), randomAll(255), randomAll(255)];
@@ -250,70 +251,88 @@ function updateWPM() {
 		};
 		wpmDatasets[0] = midline;
 
-document.getElementById("finish_popup").style.display = "block";
-var ctx = document.getElementById("chart").getContext('2d');
-var config = {
-	type: 'line',
-	data: {
-		labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"],
-		datasets: []
-	},
-	options: {
-		elements: {
-			point: {
-				radius: 0
+		document.getElementById("finish_popup").style.display = "block";
+		var ctx = document.getElementById("chart").getContext('2d');
+		var config = {
+			type: 'line',
+			data: {
+				labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"],
+				datasets: []
+			},
+			options: {
+				elements: {
+					point: {
+						radius: 0
+					}
+				},
+				title: {
+					display: true,
+					text: "WPM Throughout Time"
+				},
+				tooltips: {
+					display: false
+				},
+				scales: {
+					xAxes: [{
+						gridLines: {
+							display: false,
+							color: "#fff"
+						},
+						scaleLabel: {
+							display: true,
+							labelString: 'Time (s)'
+						},
+					}],
+					yAxes: [{
+						gridLines: {
+							display: false,
+							color: "#FFFFFF"
+						},
+						scaleLabel: {
+							display: true,
+							labelString: 'WPM'
+						},
+					}]
+				}
 			}
-		},
-		title: {
-			display: true,
-			text: "WPM Throughout Time"
-		},
-		tooltips: {
-			display: false
-		},
-		scales: {
-			xAxes: [{
-				gridLines: {
-					display: false,
-					color: "#fff"
-				},
-				scaleLabel: {
-					display: true,
-					labelString: 'Time (s)'
-				},
-			}],
-			yAxes: [{
-				gridLines: {
-					display: false,
-					color: "#FFFFFF"
-				},
-				scaleLabel: {
-					display: true,
-					labelString: 'WPM'
-				},
-			}]
+		};
+		if (the_chart === null || the_chart === undefined) the_chart = new Chart(ctx, config);
+		if (wpmDatasets.length == 2) {
+			the_chart.data.datasets = [wpmDatasets[1], wpmDatasets[0]]
+		} else {
+			the_chart.data.datasets = wpmDatasets;
 		}
+		Chart.defaults.global.defaultFontColor = 'white';
+		final_errors = errors;
+		the_chart.update();
+		labels = [];
+		wpm = [];
+		errors = 0;
 	}
-};
-if (the_chart === null || the_chart === undefined)  the_chart = new Chart(ctx, config);
-if (wpmDatasets.length == 2) {
-	the_chart.data.datasets = [wpmDatasets[1], wpmDatasets[0]]
-} else {
-	the_chart.data.datasets = wpmDatasets;
-}
-Chart.defaults.global.defaultFontColor='white';
-the_chart.update();
-labels = [];
-wpm = [];
-}
 }
 
 function update_height() {
-	setTimeout(function() {
+	setTimeout(function () {
 		if ($("#word-box").height() != pastHeight) {
 			word_bank_shuffle();
 			pastHeight = $("#word-box").height();
 		}
 		update_height();
 	}, 100);
+}
+
+function add_removed(removed) {
+	if (removed === "") {
+		var full_words = $("#text-box").text().split(" ");
+		for (var i = 0; i > full_words.length - 1; i++) { // Last word doesn't count because the typist might not have finished the word.
+			console.log(full_words[i]);
+			if (removed_words.indexOf(full_words[i]) == -1) {
+				errors++;
+				console.log(full_words[i] + ": " + errors)
+			}
+		}
+	} else {
+		removed_words[removed - words.length] = removed;
+	}
+
 }
