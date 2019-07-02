@@ -32,14 +32,6 @@ var currentDate,
 	sum = 0,
 	midline_data = [];
 $(document).ready(function () {
-	ranlen = randomAll(3);
-	if (ranlen === 0) {
-		$('body').css("background-color", "#96ace8");
-	} else if (ranlen == 1) {
-		$('body').css("background-color", "#ff9b5e");
-	} else if (ranlen == 2) {
-		$('body').css("background-color", "#e55454");
-	}
 	var element = document.getElementById("text-box");
 	element.spellcheck = false;
 	element.focus();
@@ -84,14 +76,12 @@ function start_loop() {
 	setTimeout(function () {
 		if ($("#text-box").text() !== "") {
 			rt = timer();
-			$("#wpm").text("WPM: " + (precisionRound((($("#text-box").text().length / 5) / rt), 2)));
 			updateWPM();
-			$("#time-cps").text("Time: " + format());
+			$("#time-cps").text(format());
 		} else {
 			currentDate = Date.now();
 			currentDateS = Date.now();
-			$("#wpm").text("WPM: ");
-			$("#time-cps").text("Time: 60.00");
+			$("#time-cps").text("60.00");
 		}
 		start_loop();
 	}, 10);
@@ -188,7 +178,6 @@ function updateWPM() {
 		}
 		if (current_wpm >= best_wpm || best_wpm === undefined) {
 			best_wpm = current_wpm;
-			$("#characters").text("Best WPM: " + best_wpm);
 		}
 	}
 	if (rt >= 1) {
